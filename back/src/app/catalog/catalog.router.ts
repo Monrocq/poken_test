@@ -1,10 +1,11 @@
 import { Request, Response, Router } from 'express';
 import { CATALOG_ENDPOINT, CONTENT_ENDPOINT } from '../../constants/endpoint';
+import { Catalog } from './catalog.model';
 
 export const router: Router = Router();
 
 router.get(CATALOG_ENDPOINT+'/', (req: Request, res: Response) => {
-  let videos: Object[] = [];
+  let videos: object[] = [];
   for(let i = 0; i < 50; i++) {
     videos.push({
       title: `Vidéo${i}`,
