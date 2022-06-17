@@ -13,19 +13,16 @@
 }
 
 .footer {
-  display: flex;
   flex: 1;
   padding: 2rem 0;
   border-top: 1px solid #eaeaea;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
+  color: blue;
 }
 
 .title a {
@@ -68,7 +65,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 900px;
+  max-width: 1000px;
 }
 
 .card {
@@ -85,7 +82,10 @@
 
 .card:hover,
 .card:focus,
-.card:active {
+.card:active,
+.footer a:hover,
+.footer a:focus,
+.footer a:active {
   color: #0070f3;
   border-color: #0070f3;
 }
@@ -102,8 +102,29 @@
   line-height: 1.5;
 }
 
+.card div {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  opacity: 1;
+}
+
 .card img {
   width: 100%;
+}
+
+img.fadeImg {
+  animation-name: fadeImgAnimation;
+  animation-duration: 2s;
+}
+
+@keyframes fadeImgAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .logo {

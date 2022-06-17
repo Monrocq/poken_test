@@ -6,7 +6,9 @@ export const router: Router = Router();
 
 router.get(CATALOG_ENDPOINT+'/', (req: Request, res: Response) => {
   let videos: object[] = [];
-  for(let i = 0; i < 50; i++) {
+  const {from, to} = req.query;
+  if (parseInt(to as string) >= 50) return res.status(200).json([])
+  for(let i = parseInt(from as string || '1'); i <= parseInt(to as string || '6'); i++) {
     videos.push({
       title: `Vidéo${i}`,
       thumbnail: `${CONTENT_ENDPOINT}/thumbnail`,
