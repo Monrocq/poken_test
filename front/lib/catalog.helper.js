@@ -5,3 +5,12 @@ export async function getVideos(from = 1, to = 6) {
   return response.json()
 }
 
+export async function getVideo(id) {
+  const response = await fetch(`${BACK_URL}/video?id=${id}`)
+  return response.json()
+}
+
+export async function getVideosLength() {
+  const response = await fetch(`${BACK_URL}/catalog/length`)
+  return response.json()
+}

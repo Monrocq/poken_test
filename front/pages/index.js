@@ -1,12 +1,11 @@
 import {useState, useEffect} from 'react'
-import { animated, useTransition } from "react-spring";
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { getVideos } from '../lib/catalog.helper'
 import {BACK_URL} from '../lib/constants'
-import Loading from '../components/Loading';
 import { SpinnerCircular } from 'spinners-react';
+import Link from 'next/link'
+import Layout from '../components/Layout'
 
 
 export default function Home(props) {
@@ -43,51 +42,28 @@ export default function Home(props) {
     };
   }, [loading])
   return (
-    <div className={styles.container} onScroll={handleScroll}>
+    <Layout onScroll={handleScroll} title="Catalogue de vidéos">
       <Head>
-        <title>PokenTube</title>
-        <meta name="description" content="A collecton of videos" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>PokenTube - Catalogue</title>
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a>Poken<span>Tube</span></a>
-        </h1>
-
-        <h3 className={styles.description}>
-          Catalogue de vidéos
-        </h3>
-
-        <div className={styles.grid}>
+      <div className={styles.grid}>
           {videos.map(video => (
-            <a className={styles.card} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} id={video.title}>
-              <div className="image">
-                <img src={
-                  BACK_URL + (videoSelected ===  video.title ? video.extract : video.thumbnail) 
-                  } alt="" className={videoSelected === video.title ? styles.fadeImg : ""}/>
-                  <div className="background"></div>
-              </div>
-              <h2>{video.title}</h2>
-            </a>
+            <Link href={`/catalog/${video.id}`}>
+              <a className={styles.card} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} key={video.title}>
+                <div className="image">
+                  <img src={
+                    BACK_URL + (videoSelected ===  video.title ? video.extract : video.thumbnail) 
+                    } alt="" className={videoSelected === video.title ? styles.fadeImg : ""}/>
+                    <div className="background"></div>
+                </div>
+                <h2>{video.title}</h2>
+              </a>
+            </Link>
           ))}
         </div>
         {loading && <SpinnerCircular color="#0000FF"/>}
         {listEnded && "Fin de la liste"}
-      </main>
-
-      <footer className={styles.footer}>
-        Développé par{' '}
-        <a href="https://linkedin.com/in/monrocq">
-          Adel MALIK-MONROCQ
-        </a>
-        <br/>
-        Conçu par{' '}
-        <a href="https://thepokencompany.com">
-          The Poken Company
-        </a>
-      </footer>
-    </div>
+    </Layout>
   )
 }
 
