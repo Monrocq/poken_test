@@ -13,7 +13,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-spring": "^9.4.5",
-    "spinners-react": "^1.0.7"
+    "spinners-react": "^1.0.7",
+    "timestamp-to-date": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",

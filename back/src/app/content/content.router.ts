@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import path from 'path'
-import { CONTENT_ENDPOINT } from '../../constants/endpoint';
+import { CONTENT_ENDPOINT } from '../../constants/endpoints';
 
 export const router: Router = Router();
 

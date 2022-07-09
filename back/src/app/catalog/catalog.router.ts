@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { CATALOG_ENDPOINT, CATALOG_LENGTH, CONTENT_ENDPOINT } from '../../constants/endpoint';
+import { CATALOG_ENDPOINT, CATALOG_LENGTH, CONTENT_ENDPOINT } from '../../constants/endpoints';
 import { Catalog } from './catalog.model';
 
 export const router: Router = Router();

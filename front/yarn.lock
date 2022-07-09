@@ -5882,6 +5882,11 @@
     "readable-stream" "~2.3.6"
     "xtend" "~4.0.1"
 
+"timestamp-to-date@^1.1.0":
+  "integrity" "sha512-XYDA+h2TMKj/KJJ5wAkZ25AcBGu/dwZNDy3lkNWRbLUcosvhTuaZ0Or3VOzjYuZD4SuHrXARncmWZChXncMznw=="
+  "resolved" "https://registry.npmjs.org/timestamp-to-date/-/timestamp-to-date-1.1.0.tgz"
+  "version" "1.1.0"
+
 "tmpl@1.0.5":
   "integrity" "sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw=="
   "resolved" "https://registry.npmjs.org/tmpl/-/tmpl-1.0.5.tgz"
