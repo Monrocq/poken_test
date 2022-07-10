@@ -13,6 +13,23 @@
   justify-content: center;
   flex-wrap: wrap;
   max-width: 1000px;
+  margin: 2rem 0;
+}
+
+.search_box {
+  min-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 20vw;
+  color: gray;
+}
+
+.input {
+  margin: 1rem 0 0;
+  height: 35px;
+  padding: 0 15px;
 }
 
 .card {

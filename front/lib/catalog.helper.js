@@ -14,3 +14,8 @@ export async function getVideosLength() {
   const response = await fetch(`${BACK_URL}/catalog/length`)
   return response.json()
 }
+
+export async function searchVideos(keyword) {
+  const response = await fetch(`${BACK_URL}/catalog/search?keyword=${keyword}`)
+  return response.json()
+}

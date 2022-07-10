@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { getVideos } from '../lib/catalog.helper'
+import { getVideos, searchVideos } from '../lib/catalog.helper'
 import {BACK_URL} from '../lib/constants'
 import { SpinnerCircular } from 'spinners-react';
 import Link from 'next/link'
@@ -33,7 +33,21 @@ export default function Home(props) {
       setLoading(false)
     }
   };
+  const onInputChange = async event => {
+    setLoading(true)
+    setListEnded(false)
+    const keyword = event.target.value
+    if (keyword.length > 0) {
+      const searchFetch = await searchVideos(keyword)
+      setVideos(searchFetch)
+      if (searchFetch.length === 0) setListEnded(true)
+    } else {
+      location.reload()
+    }
+    setLoading(false)
+  }
   useEffect(() => {
+    console.log(videos)
     window.addEventListener('scroll', handleScroll, {
       passive: true
     });
@@ -46,14 +60,18 @@ export default function Home(props) {
       <Head>
         <title>PokenTube - Catalogue</title>
       </Head>
+      <div className={styles.search_box}>
+        <input type="text" className={styles.input} name="" id="" placeholder="Rechercher..." onChange={onInputChange} />
+        <i>Indiquez le numéro d'une vidéo</i>
+      </div>
       <div className={styles.grid}>
           {videos.map(video => (
-            <Link href={`/catalog/${video.id}`}>
-              <a className={styles.card} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} key={video.title}>
+            <Link href={`/catalog/${video.id}`} key={video.id}>
+              <a className={styles.card} id={video.title} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <div className="image">
                   <img src={
                     BACK_URL + (videoSelected ===  video.title ? video.extract : video.thumbnail) 
-                    } alt="" className={videoSelected === video.title ? styles.fadeImg : ""}/>
+                    } alt={video.title} className={videoSelected === video.title ? styles.fadeImg : ""}/>
                     <div className="background"></div>
                 </div>
                 <h2>{video.title}</h2>
