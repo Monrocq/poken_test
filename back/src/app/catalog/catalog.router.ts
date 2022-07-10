@@ -27,7 +27,7 @@ router.get(CATALOG_ENDPOINT+'/length', (req: Request, res: Response) => {
 router.get(CATALOG_ENDPOINT+'/search', (req: Request, res: Response) => {
   const {keyword} = req.query
   const index = parseInt(keyword as string)
-  if (!(index > 0) || index > 100) return res.status(400).json([]) 
+  if (!(index > 0) || index > 100) return res.status(200).json([]) 
   return res.status(200).json([{
     id: keyword,
     title: `Vidéo${keyword}`,

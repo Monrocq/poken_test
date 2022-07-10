@@ -6,6 +6,7 @@ import {BACK_URL} from '../lib/constants'
 import { SpinnerCircular } from 'spinners-react';
 import Link from 'next/link'
 import Layout from '../components/Layout'
+import { useSession, getSession } from "next-auth/react"
 
 
 export default function Home(props) {
@@ -14,9 +15,10 @@ export default function Home(props) {
   const [videoSelected, setVideoSelected] = useState('video0')
   const [listEnded, setListEnded] = useState(false)
   const [delayHandler, setDelayHandler] = useState(null)
+  const { data: session, status } = useSession()
   const handleMouseEnter = event => {
     setDelayHandler(setTimeout(() => {
-      setVideoSelected(event.target.id)
+      session && setVideoSelected(event.target.id)
     }, 1000))
   }
   const handleMouseLeave = () => {
@@ -47,7 +49,6 @@ export default function Home(props) {
     setLoading(false)
   }
   useEffect(() => {
-    console.log(videos)
     window.addEventListener('scroll', handleScroll, {
       passive: true
     });
@@ -68,7 +69,7 @@ export default function Home(props) {
           {videos.map(video => (
             <Link href={`/catalog/${video.id}`} key={video.id}>
               <a className={styles.card} id={video.title} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <div className="image">
+                <div className={!session && styles.blur}>
                   <img src={
                     BACK_URL + (videoSelected ===  video.title ? video.extract : video.thumbnail) 
                     } alt={video.title} className={videoSelected === video.title ? styles.fadeImg : ""}/>
@@ -85,7 +86,7 @@ export default function Home(props) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   const videos = await getVideos();
   return {
     props: {

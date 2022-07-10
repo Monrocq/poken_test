@@ -1,9 +1,10 @@
-import React from 'react'
 import Head from 'next/head'
 import styles from '../styles/Layout.module.css'
 import Link from 'next/link'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 function Layout({children, title}) {
+  const { data: session } = useSession()
   return (
     <div className="container">
       <Head>
@@ -16,6 +17,17 @@ function Layout({children, title}) {
         <h1 className={styles.title}>
           Welcome to <Link href="/"><a>Poken<span>Tube</span></a></Link>
         </h1>
+
+        {session && (
+          <>
+          Signed in as {session.user.email} <br />
+          <button onClick={() => signOut()}>Sign out</button>
+        </>
+        ) || <>
+          Not signed in <br />
+          <button onClick={() => signIn()}>Sign in</button>
+        </>}
+        
 
         <h3 className={styles.description}>
           {title}

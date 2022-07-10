@@ -1,10 +1,60 @@
 import Layout from "../../components/Layout";
-import {getVideo, getVideosLength} from "../../lib/catalog.helper"
+import {checkDislike, checkLike, dislikeVideo, getVideo, getVideosLength, likeVideo, cancelLike, cancelDislike} from "../../lib/catalog.helper"
 import {BACK_URL} from "../../lib/constants";
 import styles from '../../styles/Catalog.module.css'
 import timestampToDate from 'timestamp-to-date';
+import { useState, useEffect } from "react";
+import { getSession } from "next-auth/react"
 
-export default function Video({video, likes, dislikes}) {
+export default function Video({video}) {
+  const [loading, setLoading] = useState(false)
+  const [liked, setLiked] = useState(false)
+  const [disliked, setDisliked] = useState(false)
+  const [likes, setLikes] = useState(video.like)
+  const [dislikes, setDislikes] = useState(video.dislike)
+  useEffect(() => {
+    setLoading(true)
+    getSession().then((data) => {
+      init(data.user)
+    })
+  }, [])
+  async function init(user) {
+    setLiked(await checkLike(video.id, user.name))
+    setDisliked(await checkDislike(video.id, user.name))
+    setLoading(false)
+  }
+  async function handleLike() {
+    if (!loading) {
+      setLoading(true)
+      getSession().then(async data => {
+        let result;
+        if (liked) {
+          result = await cancelLike(video.id, data.user.name)
+        } else {
+          result = await likeVideo(video.id, data.user.name)
+        }
+        setLiked(!liked)
+        setLikes(result)
+        setLoading(false)
+      })
+    }
+  }
+  async function handleDislike() {
+    if (!loading) {
+      setLoading(true)
+      getSession().then(async data => {
+        let result;
+        if (disliked) {
+          result = await cancelDislike(video.id, data.user.name)
+        } else {
+          result = await dislikeVideo(video.id, data.user.name)
+        }
+        setDisliked(!disliked)
+        setDislikes(result)
+        setLoading(false)
+      })
+    }
+  }
   return (
     <Layout title={video.title}>
       <div className={styles.content}>
@@ -20,11 +70,11 @@ export default function Video({video, likes, dislikes}) {
           <div className={styles.metadata_right}>
             <strong>Views : {video.views}</strong>
             <div className={styles.vote}>
-              <img src="/icons/like.png" alt="thumb to up" width="25"/>
-              <b className={styles.vote_item}>{video.like}</b>
+              <img src={liked ? "/icons/liked.png" : "/icons/like.png"} alt="thumb to up" width="25" onClick={handleLike}/>
+              <b className={styles.vote_item}>{likes}</b>
               <div className={styles.divider}></div>
-              <img src="/icons/dislike.png" alt="thumb to up" width="25"/>
-              <b className={styles.vote_item}>{video.dislike}</b>
+              <img src={disliked ? "/icons/disliked.png" : "/icons/dislike.png"} alt="thumb to up" width="25" onClick={handleDislike}/>
+              <b className={styles.vote_item}>{dislikes}</b>
             </div>
           </div>
         </div>
@@ -44,7 +94,7 @@ export default function Video({video, likes, dislikes}) {
   )
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params}) {
   const video = await getVideo(params.id);
   return {
     props: {
