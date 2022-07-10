@@ -49,3 +49,15 @@ export async function checkDislike(id, user) {
   const response = await fetch(`${BACK_URL}/video/dislike/check?id=${id}&user=${user}`)
   return response.json();
 }
+
+export async function commentVideo(id, user, comment) {
+  const response = await fetch(`${BACK_URL}/video/comment?id=${id}&user=${user}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({text: comment})
+  })
+  return response.json()
+}

@@ -1,3 +1,5 @@
+import { Comment } from "../comments/comments.model";
+
 export interface Video {
   id: number;
   title: string;
@@ -10,7 +12,7 @@ export interface Video {
   creator_at: string;
   like: number;
   dislike: number;
-  comments: object[];
+  comments: Comment[];
   thumbnail: string;
   extract: string;
 }

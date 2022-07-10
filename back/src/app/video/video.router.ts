@@ -4,7 +4,7 @@ import { CONTENT_ENDPOINT, VIDEO_ENDPOINT } from '../../constants/endpoints';
 import { Video } from './video.model';
 import { LoremIpsum } from 'lorem-ipsum'
 import {getVideoDurationInSeconds} from 'get-video-duration'
-import { cancelDislike, cancelLike, checkDislike, checkLike, dislike, handleCookies, like } from './video.handler';
+import { cancelDislike, cancelLike, checkDislike, checkLike, comment, comments, dislike, handleCookies, like } from './video.handler';
 
 export const router: Router = Router();
 
@@ -24,7 +24,7 @@ router.get(VIDEO_ENDPOINT+'/', async (req: Request, res: Response) => {
     creator_at: Date.now().toString(),
     like: likes,
     dislike: dislikes,
-    comments: [],
+    comments: comments.get(id as string) ?? [],
     thumbnail: `${CONTENT_ENDPOINT}/thumbnail`,
     extract: `${CONTENT_ENDPOINT}/extract`
   }
@@ -59,4 +59,10 @@ router.get(VIDEO_ENDPOINT+'/like/check', async (req: Request, res: Response) => 
 router.get(VIDEO_ENDPOINT+'/dislike/check', async (req: Request, res: Response)=> {
   const {id, user} = req.query
   return res.status(200).json(checkDislike(id as string, user as string))
+})
+
+router.post(VIDEO_ENDPOINT+'/comment', async (req: Request, res: Response) => {
+  const {id, user} = req.query
+  const { text } = req.body
+  return res.status(200).json(comment(id as string, user as string, text))
 })

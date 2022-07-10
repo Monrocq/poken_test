@@ -1,6 +1,9 @@
+import { Comment } from "../comments/comments.model";
+
 export let views: Map<string, number> = new Map;
 export let likes: Map<string, string[]> = new Map;
 export let dislikes: Map<string, string[]> = new Map;
+export let comments: Map<string, Comment[]> = new Map;
 
 export const handleCookies = (id: string) => {
   let view: number = views.get(id) ?? 0
@@ -48,4 +51,14 @@ export const checkDislike = (id: string, user: string): boolean => {
   let dislike: string[] = dislikes.get(id) ?? []
   if (dislike.includes(user)) return true
   return false
+}
+
+export const comment = (id: string, user: string, text: string): Comment[] => {
+  let comment: Comment[] = comments.get(id) ?? []
+  comments.set(id, [...comment, {
+    user,
+    text,
+    date: Date.now().toString()
+  }]);
+  return comments.get(id) || []
 }

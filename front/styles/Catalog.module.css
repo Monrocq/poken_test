@@ -44,3 +44,14 @@
   justify-content: space-between;
   text-decoration: underline;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment {
+  background-color: rgb(240, 245, 245);
+  margin: 10px;
+  padding: 10px;
+}

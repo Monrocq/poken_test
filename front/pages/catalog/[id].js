@@ -1,5 +1,5 @@
 import Layout from "../../components/Layout";
-import {checkDislike, checkLike, dislikeVideo, getVideo, getVideosLength, likeVideo, cancelLike, cancelDislike} from "../../lib/catalog.helper"
+import {checkDislike, checkLike, dislikeVideo, getVideo, getVideosLength, likeVideo, cancelLike, cancelDislike, commentVideo} from "../../lib/catalog.helper"
 import {BACK_URL} from "../../lib/constants";
 import styles from '../../styles/Catalog.module.css'
 import timestampToDate from 'timestamp-to-date';
@@ -12,6 +12,8 @@ export default function Video({video}) {
   const [disliked, setDisliked] = useState(false)
   const [likes, setLikes] = useState(video.like)
   const [dislikes, setDislikes] = useState(video.dislike)
+  const [comments, setComments] = useState(video.comments)
+  const [comment, setComment] = useState("")
   useEffect(() => {
     setLoading(true)
     getSession().then((data) => {
@@ -55,6 +57,18 @@ export default function Video({video}) {
       })
     }
   }
+  function postComment(event) {
+    event.preventDefault()
+    if (!loading) {
+      setLoading(true)
+      getSession().then(async data => {
+        const result = await commentVideo(video.id, data.user.name, comment);
+        setComments(result);
+        setLoading(false)
+        console.log(result)
+      })
+    }
+  }
   return (
     <Layout title={video.title}>
       <div className={styles.content}>
@@ -80,15 +94,19 @@ export default function Video({video}) {
         </div>
         <p className={styles.description}>{video.description}</p>
         <h4>Commentaires</h4>
-        {video.comments.map(comment => (
-          <div>
+        <form className={styles.form}>
+          <textarea name="comment" id="comment" cols="30" rows="10" onChange={event => setComment(event.target.value)}></textarea>
+          <button onClick={postComment}>Send</button>
+        </form>
+        {comments.map((comment, index) => (
+          <div className={styles.comment} key={index}>
             <div className={styles.comments}>
-              <h5>{comment.user}</h5>
-              <h5>{timestampToDate(comment.date)}</h5>
+              <h5>{comment.user} said :</h5>
+              <h5>{timestampToDate(comment.date, 'yyyy-MM-dd HH:mm:ss')}</h5>
             </div>
             {comment.text}
           </div>
-        ))}
+        )).reverse()}
       </div>
     </Layout>
   )
