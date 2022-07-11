@@ -6,7 +6,7 @@ import {BACK_URL} from '../lib/constants'
 import { SpinnerCircular } from 'spinners-react';
 import Link from 'next/link'
 import Layout from '../components/Layout'
-import { useSession, getSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 
 
 export default function Home(props) {
@@ -15,7 +15,7 @@ export default function Home(props) {
   const [videoSelected, setVideoSelected] = useState('video0')
   const [listEnded, setListEnded] = useState(false)
   const [delayHandler, setDelayHandler] = useState(null)
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const handleMouseEnter = event => {
     setDelayHandler(setTimeout(() => {
       session && setVideoSelected(event.target.id)
