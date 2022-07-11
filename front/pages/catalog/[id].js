@@ -1,10 +1,12 @@
+import { useState, useEffect } from "react";
+import { getSession } from "next-auth/react"
+import Image from 'next/image'
 import Layout from "../../components/Layout";
 import {checkDislike, checkLike, dislikeVideo, getVideo, getVideosLength, likeVideo, cancelLike, cancelDislike, commentVideo} from "../../lib/catalog.helper"
 import {BACK_URL} from "../../lib/constants";
 import styles from '../../styles/Catalog.module.css'
 import timestampToDate from 'timestamp-to-date';
-import { useState, useEffect } from "react";
-import { getSession } from "next-auth/react"
+
 
 export default function Video({video}) {
   const [loading, setLoading] = useState(false)
@@ -15,16 +17,16 @@ export default function Video({video}) {
   const [comments, setComments] = useState(video.comments)
   const [comment, setComment] = useState("")
   useEffect(() => {
+    async function init(user) {
+      setLiked(await checkLike(video.id, user.name))
+      setDisliked(await checkDislike(video.id, user.name))
+      setLoading(false)
+    }
     setLoading(true)
     getSession().then((data) => {
       init(data.user)
     })
-  }, [])
-  async function init(user) {
-    setLiked(await checkLike(video.id, user.name))
-    setDisliked(await checkDislike(video.id, user.name))
-    setLoading(false)
-  }
+  }, [video.id])
   async function handleLike() {
     if (!loading) {
       setLoading(true)
@@ -64,6 +66,7 @@ export default function Video({video}) {
       getSession().then(async data => {
         const result = await commentVideo(video.id, data.user.name, comment);
         setComments(result);
+        setComment("");
         setLoading(false)
         console.log(result)
       })
@@ -74,7 +77,7 @@ export default function Video({video}) {
       <div className={styles.content}>
         <video controls>
           <source src={BACK_URL+video.video} type="video/mp4"/>
-          Désolé mais votre navigateur n'est pas adapté
+          Désolé mais votre navigateur n&apos;est pas adapté
         </video>
         <div className={styles.metadata}>
           <div>
@@ -84,10 +87,10 @@ export default function Video({video}) {
           <div className={styles.metadata_right}>
             <strong>Views : {video.views}</strong>
             <div className={styles.vote}>
-              <img src={liked ? "/icons/liked.png" : "/icons/like.png"} alt="thumb to up" width="25" onClick={handleLike}/>
+              <Image src={liked ? "/icons/liked.png" : "/icons/like.png"} alt="thumb to up" width="25" height="25" onClick={handleLike}/>
               <b className={styles.vote_item}>{likes}</b>
               <div className={styles.divider}></div>
-              <img src={disliked ? "/icons/disliked.png" : "/icons/dislike.png"} alt="thumb to up" width="25" onClick={handleDislike}/>
+              <Image src={disliked ? "/icons/disliked.png" : "/icons/dislike.png"} alt="thumb to up" width="25" height="25" onClick={handleDislike}/>
               <b className={styles.vote_item}>{dislikes}</b>
             </div>
           </div>
@@ -95,7 +98,7 @@ export default function Video({video}) {
         <p className={styles.description}>{video.description}</p>
         <h4>Commentaires</h4>
         <form className={styles.form}>
-          <textarea name="comment" id="comment" cols="30" rows="10" onChange={event => setComment(event.target.value)}></textarea>
+          <textarea name="comment" id="comment" cols="30" rows="10" onChange={event => setComment(event.target.value)} value={comment}></textarea>
           <button onClick={postComment}>Send</button>
         </form>
         {comments.map((comment, index) => (

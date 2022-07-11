@@ -20,4 +20,6 @@ router.get(SERVER_STATUS_ENDPOINT + "/routes", (req, res) => {
   });
 });
 
-
+router.get('/', (req, res) => {
+  return res.status(200).send('Hello Word')
+})

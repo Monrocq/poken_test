@@ -1,12 +1,13 @@
 import {useState, useEffect} from 'react'
 import Head from 'next/head'
+import { useSession } from "next-auth/react"
 import styles from '../styles/Home.module.css'
 import { getVideos, searchVideos } from '../lib/catalog.helper'
 import {BACK_URL} from '../lib/constants'
 import { SpinnerCircular } from 'spinners-react';
 import Link from 'next/link'
 import Layout from '../components/Layout'
-import { useSession } from "next-auth/react"
+
 
 
 export default function Home(props) {
@@ -25,16 +26,6 @@ export default function Home(props) {
     clearTimeout(delayHandler)
     setVideoSelected('video0')
   }
-  const handleScroll = async () => {
-    const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight
-    if (!listEnded && bottom && !loading) {
-      setLoading(true)
-      const newFetch = await getVideos(videos.length + 1, videos.length + 6)
-      if (newFetch.length === 0) setListEnded(true)
-      setVideos([...videos, ...newFetch])
-      setLoading(false)
-    }
-  };
   const onInputChange = async event => {
     setLoading(true)
     setListEnded(false)
@@ -49,21 +40,31 @@ export default function Home(props) {
     setLoading(false)
   }
   useEffect(() => {
+    const handleScroll = async () => {
+      const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight
+      if (!listEnded && bottom && !loading) {
+        setLoading(true)
+        const newFetch = await getVideos(videos.length + 1, videos.length + 6)
+        if (newFetch.length === 0) setListEnded(true)
+        setVideos([...videos, ...newFetch])
+        setLoading(false)
+      }
+    };
     window.addEventListener('scroll', handleScroll, {
       passive: true
     });
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [loading])
+  }, [loading, listEnded, videos])
   return (
-    <Layout onScroll={handleScroll} title="Catalogue de vidéos">
+    <Layout title="Catalogue de vidéos">
       <Head>
         <title>PokenTube - Catalogue</title>
       </Head>
       <div className={styles.search_box}>
         <input type="text" className={styles.input} name="" id="" placeholder="Rechercher..." onChange={onInputChange} />
-        <i>Indiquez le numéro d'une vidéo</i>
+        <i>Indiquez le numéro d&apos;une vidéo</i>
       </div>
       <div className={styles.grid}>
           {videos.map(video => (

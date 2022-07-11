@@ -1,10 +1,10 @@
 # The Poken-Tube
 
-## The Frontend
+## The Backend
 
 ### Introduction
 
-This repository goes with its tween --> The Backend.
+This repository goes with its tween --> The Frontend.
 
 A company gave me some instructions to take a technical test. I released this project to pass this test.
 
@@ -14,17 +14,18 @@ You have some features, e.g : login/logout, display video collection, display vi
 
 ### Stack used
 
-For the frontend, I used Next.js for the SSR
+For the backend, I used Typescript and Express.JS
 
-For the hosting, I used Vercel and voilà the link : [https://poken-tube.vercel.app]()/
+For the hosting, I used Heroku and voilà the link : [https://poken-tube.herokuapp.com/]()
 
 ### Install pipeline
 
 You can install this repo like other lambda repos with `npm i` or `yarn install`
 
-You have to configure the env file with this variable :
+You have to configure the env file with those two variables :
 
-- NEXTAUTH_SECRET --> Your Auth secret
+* PORT --> port of the web server (by default : 8080)
+* CORS_URL --> the url of the frontend (without the `/` at the end)
 
 You can launch the server with `npm dev` or `npm build && npm start`
 
